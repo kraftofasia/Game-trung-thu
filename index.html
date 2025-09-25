@@ -1,35 +1,35 @@
 <style>
-    /* CSS ĐÃ CHUYỂN KHUNG HÌNH SANG CHIỀU NGANG (LANDSCAPE) */
+    /* CSS ĐÃ FIX SCROLLBAR & ĐỔI MÀU NÚT START SANG ĐỎ */
     .game-container {
         font-family: Arial, sans-serif;
         text-align: center;
-        padding: 15px;
+        padding: 10px; 
         border: 2px solid #ff9900; 
         border-radius: 10px;
         background-color: #f0f8ff; 
-        max-width: 600px; /* Tăng giới hạn chiều ngang tối đa */
+        max-width: 600px;
         margin: 0 auto;
         box-sizing: border-box;
     }
     .game-title {
         color: #cc0033;
-        font-size: 4vw; /* Giảm font-size cho tiêu đề */
+        font-size: 3.5vw; 
         font-weight: bold;
-        margin-bottom: 15px;
+        margin-bottom: 10px; 
     }
     #score-time {
         display: flex;
         justify-content: space-around;
-        margin-bottom: 15px;
-        font-size: 3.5vw;
+        margin-bottom: 10px; 
+        font-size: 3vw;
         font-weight: bold;
     }
     #score-value { color: #28a745; }
     #time-value { color: #cc0033; }
     
     #game-board {
-        width: 100%; /* Chiếm toàn bộ chiều rộng container */
-        padding-bottom: 56.25%; /* Tỷ lệ 16:9 (9/16 = 0.5625) */
+        width: 100%; 
+        padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
         margin: 0 auto;
         position: relative;
         background-color: #e9ecef; 
@@ -37,8 +37,8 @@
     }
     .game-object {
         position: absolute;
-        width: 10%; /* Kích thước bánh nhỏ lại cho khung ngang */
-        height: 18%; /* Chiều cao tương ứng 10% chiều rộng */
+        width: 10%; 
+        height: 18%; 
         border-radius: 50%;
         background-color: #d2b48c; 
         border: 3px solid #a0522d; 
@@ -57,28 +57,35 @@
         transform: scale(1);
     }
     .start-btn {
-        padding: 10px 20px;
-        background-color: #007bff;
+        /* MÀU NÚT ĐÃ ĐỔI SANG ĐỎ */
+        padding: 0.8vw 1.5vw; 
+        background-color: #cc0033; 
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 18px;
-        margin-top: 15px;
+        font-size: 3.5vw; 
+        margin-top: 10px; 
+        line-height: 1.2;
+        transition: background-color 0.3s;
+    }
+    .start-btn:hover {
+        background-color: #e6004c; /* Hover màu đỏ tươi hơn */
     }
     #final-message {
-        margin-top: 20px;
-        font-size: 4vw;
+        margin-top: 15px; 
+        font-size: 3.5vw;
         font-weight: bold;
-        min-height: 25px;
+        min-height: 20px;
     }
     
     /* Giới hạn kích thước font tối đa trên màn hình lớn */
     @media (min-width: 600px) {
-        .game-title { font-size: 24px; }
-        #score-time { font-size: 18px; }
+        .game-title { font-size: 21px; }
+        #score-time { font-size: 16px; }
         .game-object { font-size: 30px; }
-        #final-message { font-size: 20px; }
+        .start-btn { font-size: 18px; padding: 10px 20px; }
+        #final-message { font-size: 18px; }
     }
 </style>
 
@@ -99,7 +106,7 @@
 </div>
 
 <script>
-    // JavaScript Logic
+    // JavaScript Logic (Không đổi)
     const TIME_LIMIT = 15;
     const NUM_OBJECTS = 6; 
 
@@ -160,17 +167,14 @@
         
         gameObjects.forEach(obj => obj.classList.remove('active'));
         
-        finalMessageEl.textContent = `Bạn đạt ${score} điểm! Nhớ đăng ký cơm nhé!`;
+        finalMessageEl.textContent = `HOÀN THÀNH! Bạn đạt ${score} điểm!`;
         finalMessageEl.style.color = 'green';
         startBtn.disabled = false;
         startBtn.textContent = 'CHƠI LẠI';
     }
 
     function getRandomPosition() {
-        // Điều chỉnh vị trí ngẫu nhiên cho khung ngang (16:9)
-        // Chiều ngang (X): 10% - 80% (từ 100%)
         const x = Math.random() * 80 + 5; 
-        // Chiều dọc (Y): 10% - 70% (từ 56.25% chiều rộng)
         const y = Math.random() * 65 + 5; 
         return { x, y };
     }
@@ -198,7 +202,6 @@
         
         obj.classList.remove('active');
         
-        // Hiệu ứng tăng điểm
         const hitFeedback = document.createElement('div');
         hitFeedback.textContent = '+1';
         hitFeedback.style.cssText = `
@@ -216,7 +219,6 @@
         setTimeout(() => boardEl.removeChild(hitFeedback), 500);
     }
     
-    // Thêm keyframe cho hiệu ứng +1
     const styleSheet = document.createElement("style");
     styleSheet.innerHTML = `
         @keyframes fade-up {
@@ -225,5 +227,4 @@
         }
     `;
     document.head.appendChild(styleSheet);
-
 </script>
