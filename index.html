@@ -1,114 +1,193 @@
-<style>
-    /* CSS ĐÃ FIX SCROLLBAR & ĐỔI MÀU NÚT START SANG ĐỎ */
-    .game-container {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding: 10px; 
-        border: 2px solid #ff9900; 
-        border-radius: 10px;
-        background-color: #f0f8ff; 
-        max-width: 600px;
-        margin: 0 auto;
-        box-sizing: border-box;
-    }
-    .game-title {
-        color: #cc0033;
-        font-size: 3.5vw; 
-        font-weight: bold;
-        margin-bottom: 10px; 
-    }
-    #score-time {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 10px; 
-        font-size: 3vw;
-        font-weight: bold;
-    }
-    #score-value { color: #28a745; }
-    #time-value { color: #cc0033; }
-    
-    #game-board {
-        width: 100%; 
-        padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
-        margin: 0 auto;
-        position: relative;
-        background-color: #e9ecef; 
-        border-radius: 8px;
-    }
-    .game-object {
-        position: absolute;
-        width: 10%; 
-        height: 18%; 
-        border-radius: 50%;
-        background-color: #d2b48c; 
-        border: 3px solid #a0522d; 
-        cursor: pointer;
-        opacity: 0;
-        transform: scale(0.5);
-        transition: opacity 0.2s, transform 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 200%; 
-        color: #cc0033;
-    }
-    .game-object.active {
-        opacity: 1;
-        transform: scale(1);
-    }
-    .start-btn {
-        /* MÀU NÚT ĐÃ ĐỔI SANG ĐỎ */
-        padding: 0.8vw 1.5vw; 
-        background-color: #cc0033; 
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 3.5vw; 
-        margin-top: 10px; 
-        line-height: 1.2;
-        transition: background-color 0.3s;
-    }
-    .start-btn:hover {
-        background-color: #e6004c; /* Hover màu đỏ tươi hơn */
-    }
-    #final-message {
-        margin-top: 15px; 
-        font-size: 3.5vw;
-        font-weight: bold;
-        min-height: 20px;
-    }
-    
-    /* Giới hạn kích thước font tối đa trên màn hình lớn */
-    @media (min-width: 600px) {
-        .game-title { font-size: 21px; }
-        #score-time { font-size: 16px; }
-        .game-object { font-size: 30px; }
-        .start-btn { font-size: 18px; padding: 10px 20px; }
-        #final-message { font-size: 18px; }
-    }
-</style>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Đập Bánh Trung Thu - Intro GIF</title>
+    <style>
+        /* CSS CHUNG CHO KHUNG GAME */
+        .game-container {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #ff9900;
+            border-radius: 10px;
+            background-color: #f0f8ff;
+            max-width: 600px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            position: relative; 
+            overflow: hidden; 
+        }
+        .game-title {
+            color: #cc0033;
+            font-size: 3.5vw;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #score-time {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            font-size: 3vw;
+            font-weight: bold;
+        }
+        #score-value { color: #28a745; }
+        #time-value { color: #cc0033; }
+
+        #game-board {
+            width: 100%;
+            padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
+            margin: 0 auto;
+            position: relative;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        .game-object {
+            position: absolute;
+            width: 10%;
+            height: 18%;
+            border-radius: 50%;
+            background-color: #d2b48c;
+            border: 3px solid #a0522d;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 200%;
+            color: #cc0033;
+        }
+        .game-object.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .start-btn {
+            /* Nút CHƠI LẠI */
+            padding: 0.8vw 1.5vw;
+            background-color: #cc0033;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 3.5vw;
+            margin-top: 10px;
+            line-height: 1.2;
+            transition: background-color 0.3s;
+        }
+        .start-btn:hover {
+            background-color: #e6004c;
+        }
+        #final-message {
+            margin-top: 15px;
+            font-size: 3.5vw;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        /* === CSS MÀN HÌNH GIỚI THIỆU (INTRO SCREEN) === */
+        #intro-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white; 
+            
+            /* Dùng flexbox để căn chỉnh nút xuống dưới cùng */
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-start;
+            align-items: center;
+            
+            z-index: 100;
+            /* ĐÃ CHUYỂN SANG DÙNG TÊN FILE GIF (intro_game_trungthu.gif) */
+            background-image: url('intro_game_trungthu.gif'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #intro-screen.hidden {
+            display: none;
+        }
+
+        #intro-screen-start-btn {
+            /* ĐẨY NÚT XUỐNG DƯỚI CÙNG */
+            margin-top: auto; 
+            margin-bottom: 20px; 
+            
+            padding: 1vw 2vw;
+            background-color: #f7b731; 
+            color: #8b4513; 
+            border: 3px solid #8b4513;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 4vw;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+        }
+
+        #intro-screen-start-btn:hover {
+            background-color: #ffda6a;
+            transform: scale(1.05);
+        }
+
+        /* Giới hạn kích thước font tối đa trên màn hình lớn */
+        @media (min-width: 600px) {
+            .game-title { font-size: 21px; }
+            #score-time { font-size: 16px; }
+            .game-object { font-size: 30px; }
+            .start-btn { font-size: 18px; padding: 10px 20px; }
+            #final-message { font-size: 18px; }
+            
+            /* Kích thước nút intro trên màn hình lớn */
+            #intro-screen-start-btn {
+                font-size: 24px;
+                padding: 15px 30px;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @keyframes fade-up {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
 
 <div class="game-container">
-    <div class="game-title">ĐẬP BÁNH TRUNG THU</div>
     
-    <div id="score-time">
-        <div>Điểm: <span id="score-value">0</span></div>
-        <div>Thời gian: <span id="time-value">15</span>s</div>
+    <div id="intro-screen">
+        <button id="intro-screen-start-btn" onclick="hideIntroAndStartGame()">BẮT ĐẦU CHƠI</button>
     </div>
-    
-    <div id="game-board">
+
+    <div class="game-content">
+        <div class="game-title">ĐẬP BÁNH TRUNG THU</div>
+
+        <div id="score-time">
+            <div>Điểm: <span id="score-value">0</span></div>
+            <div>Thời gian: <span id="time-value">15</span>s</div>
         </div>
 
-    <button class="start-btn" id="startButton" onclick="startGame()">BẮT ĐẦU CHƠI</button>
-    
-    <div id="final-message">Nhấn BẮT ĐẦU để chơi (15 giây)</div>
+        <div id="game-board">
+        </div>
+
+        <button class="start-btn" id="startButton" onclick="startGame()" disabled>CHƠI LẠI</button>
+
+        <div id="final-message">Nhấn BẮT ĐẦU để chơi (15 giây)</div>
+    </div>
 </div>
 
 <script>
-    // JavaScript Logic (Không đổi)
+    // === JAVASCRIPT LOGIC ===
     const TIME_LIMIT = 15;
-    const NUM_OBJECTS = 6; 
+    const NUM_OBJECTS = 6;
 
     let score = 0;
     let timeLeft = TIME_LIMIT;
@@ -116,10 +195,11 @@
     let gameInterval;
     let isGameRunning = false;
 
+    const introScreen = document.getElementById('intro-screen');
     const scoreValueEl = document.getElementById('score-value');
     const timeValueEl = document.getElementById('time-value');
     const boardEl = document.getElementById('game-board');
-    const startBtn = document.getElementById('startButton');
+    const startBtn = document.getElementById('startButton'); 
     const finalMessageEl = document.getElementById('final-message');
 
     let gameObjects = [];
@@ -127,15 +207,20 @@
         const obj = document.createElement('div');
         obj.classList.add('game-object');
         obj.textContent = '🥮';
-        obj.onclick = () => hitObject(obj);
+        obj.onclick = (event) => hitObject(obj, event);
         boardEl.appendChild(obj);
         gameObjects.push(obj);
+    }
+
+    function hideIntroAndStartGame() {
+        introScreen.classList.add('hidden');
+        startGame();
     }
 
     function startGame() {
         if (isGameRunning) return;
         isGameRunning = true;
-        
+
         score = 0;
         timeLeft = TIME_LIMIT;
         scoreValueEl.textContent = score;
@@ -148,7 +233,7 @@
         gameObjects.forEach(obj => obj.classList.remove('active'));
 
         timer = setInterval(updateTimer, 1000);
-        gameInterval = setInterval(showRandomObject, 700); 
+        gameInterval = setInterval(showRandomObject, 700);
     }
 
     function updateTimer() {
@@ -159,14 +244,14 @@
             endGame();
         }
     }
-    
+
     function endGame() {
         clearInterval(timer);
         clearInterval(gameInterval);
         isGameRunning = false;
-        
+
         gameObjects.forEach(obj => obj.classList.remove('active'));
-        
+
         finalMessageEl.textContent = `HOÀN THÀNH! Bạn đạt ${score} điểm!`;
         finalMessageEl.style.color = 'green';
         startBtn.disabled = false;
@@ -174,57 +259,61 @@
     }
 
     function getRandomPosition() {
-        const x = Math.random() * 80 + 5; 
-        const y = Math.random() * 65 + 5; 
-        return { x, y };
+        const boardWidth = boardEl.offsetWidth;
+        const boardHeight = boardEl.offsetHeight;
+        const objectWidth = gameObjects[0].offsetWidth; 
+        const objectHeight = gameObjects[0].offsetHeight; 
+
+        const x = Math.random() * (boardWidth - objectWidth);
+        const y = Math.random() * (boardHeight - objectHeight);
+
+        const xPercent = (x / boardWidth) * 100;
+        const yPercent = (y / boardHeight) * 100;
+        return { x: xPercent, y: yPercent };
     }
+
 
     function showRandomObject() {
         const objIndex = Math.floor(Math.random() * NUM_OBJECTS);
         const obj = gameObjects[objIndex];
-        
+
         const pos = getRandomPosition();
         obj.style.left = pos.x + '%';
         obj.style.top = pos.y + '%';
-        
+
         obj.classList.add('active');
-        
+
         setTimeout(() => {
             obj.classList.remove('active');
         }, 1000);
     }
 
-    function hitObject(obj) {
+    function hitObject(obj, event) {
         if (!obj.classList.contains('active') || !isGameRunning) return;
 
         score++;
         scoreValueEl.textContent = score;
-        
+
         obj.classList.remove('active');
-        
+
         const hitFeedback = document.createElement('div');
         hitFeedback.textContent = '+1';
         hitFeedback.style.cssText = `
-            position: absolute; 
-            left: ${obj.style.left}; 
-            top: ${obj.style.top}; 
-            color: #28a745; 
-            font-weight: bold; 
-            font-size: 20px; 
+            position: absolute;
+            left: ${event.offsetX}px; 
+            top: ${event.offsetY}px;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 20px;
             pointer-events: none;
             animation: fade-up 0.5s forwards;
+            z-index: 101; 
         `;
-        boardEl.appendChild(hitFeedback);
+        obj.appendChild(hitFeedback);
 
-        setTimeout(() => boardEl.removeChild(hitFeedback), 500);
+        setTimeout(() => obj.removeChild(hitFeedback), 500);
     }
-    
-    const styleSheet = document.createElement("style");
-    styleSheet.innerHTML = `
-        @keyframes fade-up {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
-        }
-    `;
-    document.head.appendChild(styleSheet);
 </script>
+
+</body>
+</html>
