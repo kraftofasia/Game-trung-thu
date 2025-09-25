@@ -160,7 +160,7 @@
         
         gameObjects.forEach(obj => obj.classList.remove('active'));
         
-        finalMessageEl.textContent = `HOÀN THÀNH! Bạn đạt ${score} điểm! Nhớ đăng ký cơm nhé!`;
+        finalMessageEl.textContent = `Bạn đạt ${score} điểm! Nhớ đăng ký cơm nhé!`;
         finalMessageEl.style.color = 'green';
         startBtn.disabled = false;
         startBtn.textContent = 'CHƠI LẠI';
@@ -225,4 +225,5 @@
         }
     `;
     document.head.appendChild(styleSheet);
+
 </script>
